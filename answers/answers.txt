@@ -1,0 +1,106 @@
+part 2:
+1. mysql> SELECT * FROM types;
+   +----+----------+
+   | id | name     |
+   +----+----------+
+   |  1 | Normal   |
+   |  2 | Water    |
+   |  3 | Grass    |
+   |  4 | Rock     |
+   |  5 | Fire     |
+   |  6 | Ground   |
+   |  7 | Poison   |
+   |  8 | Bug      |
+   |  9 | Electric |
+   | 10 | Dragon   |
+   | 11 | Steel    |
+   | 12 | Dark     |
+   | 13 | Fighting |
+   | 14 | Psychic  |
+   | 15 | Ghost    |
+   | 16 | Fairy    |
+   | 17 | Ice      |
+   | 18 | Flying   |
+   +----+----------+
+2.SELECT * FROM pokemons WHERE id = '45';
+  +----+-------+--------------+----------------+
+  | id | name  | primary_type | secondary_type |
+  +----+-------+--------------+----------------+
+  | 45 | Eevee |            1 |           NULL |
+  +----+-------+--------------+----------------+
+  1 row in set (0.01 sec
+
+ 3.656 rows in set (0.01 sec) pokemon
+
+ 4. select count(*) from types;
+    +----------+
+    | count(*) |
+    +----------+
+    |       18 |
+    +----------+
+
+ 5.mysql> SELECT COUNT(secondary_type) FROM pokemons;
+   +-----------------------+
+   | COUNT(secondary_type) |
+   +-----------------------+
+   |                   316 |
+   +-----------------------+
+
+PART 3
+1.mysql> select p.id, p.name, t.name FROM pokemons p JOIN types t ON p.primary_type = t.id;
+2.mysql> select p.name, t.name FROM pokemons p JOIN types t ON p.secondary_type = t.id where p.name = 'Rufflet';
+     +---------+--------+
+     | name    | name   |
+     +---------+--------+
+     | Rufflet | Flying |
+     +---------+--------+
+     1 row in set (0.01 sec)
+3.mysql> select pt.trainerID, p.name FROM pokemon_trainer pt JOIN pokemons p ON pt.pokemon_id = p.id WHERE pt.trainerID = '303';
+      +-----------+-----------+
+      | trainerID | name      |
+      +-----------+-----------+
+      |       303 | Wailord   |
+      |       303 | Vileplume |
+      +-----------+-----------+
+      2 rows in set (0.15 sec)
+4.mysql> select count(*) FROM pokemons p JOIN types t ON p.secondary_type = t.id where p.secondary_type = '7';
+  +----------+
+  | count(*) |
+  +----------+
+  |       31 |
+  +----------+
+ 5.mysql> select count(*) count, p.primary_type, t.name from pokemons p JOIN types t ON p.primary_type = t.id group by t.name, p.primary_type;
+   +-------+--------------+----------+
+   | count | primary_type | name     |
+   +-------+--------------+----------+
+   |    90 |            1 | Normal   |
+   |    95 |            2 | Water    |
+   |    59 |            3 | Grass    |
+   |    38 |            4 | Rock     |
+   |    38 |            5 | Fire     |
+   |    29 |            6 | Ground   |
+   |    27 |            7 | Poison   |
+   |    61 |            8 | Bug      |
+   |    35 |            9 | Electric |
+   |    22 |           10 | Dragon   |
+   |    19 |           11 | Steel    |
+   |    24 |           12 | Dark     |
+   |    25 |           13 | Fighting |
+   |    38 |           14 | Psychic  |
+   |    19 |           15 | Ghost    |
+   |    14 |           16 | Fairy    |
+   |    22 |           17 | Ice      |
+   |     1 |           18 | Flying   |
+   +-------+--------------+----------+
+  6. mysql> select count(pt.pokemon_id), pt.trainerID from pokemon_trainer pt where pt.pokelevel = '100' group by pt.trainerID;
+  7.mysql> select count(pokemon_id) from (select count(pt.trainerID)=1, pt.pokemon_id from pokemon_trainer pt group by pt.pokemon_id having count(*) = 1) AS ONLY_ONCE;
+    +-------------------+
+    | count(pokemon_id) |
+    +-------------------+
+    |                13 |
+    +-------------------+
+    1 row in set (0.03 sec)
+
+PART 4
+1.
+select p.name ,t.trainername, pt.pokelevel, p.primary_type, p.secondary_type from pokemons p join pokemon_trainer pt on pt.trainerID = p.name join  trainers t  on t.trainername = pt.trainerID join types t1 on t1.name = p.primary_type join types t2 on t2.name = p.secondary_type;
